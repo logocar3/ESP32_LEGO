@@ -20,3 +20,4 @@
  * Dobri primeri na https://techtutorialsx.com/ na temo esp32
  * Shranjevanje na SD kartico https://randomnerdtutorials.com/esp32-data-logging-temperature-to-microsd-card/
  * Primer prenosa datoteke na https://github.com/G6EJD/ESP32-8266-File-Download
+ * Komunikacija z barvnim senzorjem: https://lejosnews.wordpress.com/2014/05/31/arduino-library-for-ev3-uart-sensors/
