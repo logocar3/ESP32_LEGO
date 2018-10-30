@@ -5,6 +5,7 @@
  * Boljše vprašat kot pa cele dneve razbijat če kaj ne dela
  * Ko boste iskali za informacijami za programiranje, lahko iščete tudi pod gesli ESP8266, Arduino oz. C++
  * Za razhroščevanje uporabite Serial.write / writeln.
+ * Nalozi driver za USB! 
 
 # Plan dela:
 
@@ -21,3 +22,4 @@
  * Shranjevanje na SD kartico https://randomnerdtutorials.com/esp32-data-logging-temperature-to-microsd-card/
  * Primer prenosa datoteke na https://github.com/G6EJD/ESP32-8266-File-Download
  * Komunikacija z barvnim senzorjem: https://lejosnews.wordpress.com/2014/05/31/arduino-library-for-ev3-uart-sensors/
+ * Dirver za ESP32 https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
