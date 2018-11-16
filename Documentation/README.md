@@ -9,10 +9,13 @@
  * Naloži GIT
 
 # Plan dela:
+Prvi zagovor: prvi teden decembra
 
  1. Uspešna komunikacija do SD kartice preko SPI
- 1. Prenos datoteke ESP32 -> računalnik preko Wifi. ESP32 uporabi kot http strežnik.
- 2. Branje barvnega senzorja
+ 1. Cilj do 22.11.2018: Izvesti 5s eksperiment, kjer z 50 Hz vzorčimo jakost odbite svetlobe in meritve shranjujemo v datoteko - po koncu eksperimenta vzpostavimo http strežnik, na katerega se iz PC povežemo in naložimo datoteko meritev. To datoteko nato preberemo v MATLABu in izrišemo graf vrednosti senzorja v odvisnosti od časa. 
+	 1. Prenos datoteke ESP32 -> računalnik preko Wifi. ESP32 uporabi kot http strežnik.
+	 1. Branje barvnega senzorja ter zapisovanje meritev v .csv datoteko (vrednosti ločene z vejico, vzorci s entrom)
+	 2. Odpiranje datoteke v matlabu
  3. Krmiljenje motorja 
  4. Povezava vseh komponent
  5. Regulacija motorja 
@@ -25,3 +28,4 @@
  * Komunikacija z barvnim senzorjem: https://lejosnews.wordpress.com/2014/05/31/arduino-library-for-ev3-uart-sensors/
  * Driver za ESP32 https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
  * Navodila za instalacijo GIT http://codetunnel.com/installing-git-on-windows/
+ * Protokol za komunikacijo z LEGO senzorji (UART): https://sourceforge.net/p/lejos/wiki/UART%20Sensor%20Protocol/
