@@ -26,12 +26,12 @@ void setup() {
   }
   Serial.println("initialization done.");
 
-  tekst = SD.open("/tekst.txt", FILE_WRITE);
+  tekst = SD.open("/tekst.txt", FILE_APPEND);
 
  // if the file opened okay, write to it: Bla bla
   if (tekst) {
     Serial.print("Writing to tekst.txt...");
-    tekst.println("Hello world");
+    tekst.println("test  2223");
     // close the file:
     tekst.close();
     Serial.println("done.");
