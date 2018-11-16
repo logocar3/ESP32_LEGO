@@ -31,7 +31,7 @@ void setup() {
  // if the file opened okay, write to it: Bla bla
   if (tekst) {
     Serial.print("Writing to tekst.txt...");
-    tekst.println("test  2223");
+    tekst.println("test  22233");
     // close the file:
     tekst.close();
     Serial.println("done.");
