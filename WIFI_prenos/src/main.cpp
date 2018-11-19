@@ -10,7 +10,7 @@
 #include <ESPmDNS.h>
 //#include <Network.h>
 //#include <Sys_Variables.h>
-#include <CSS.h>
+//#include <CSS.h>
 
 // SD card pin
 #define SD_CS 5
@@ -74,7 +74,7 @@ void setup() {
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
   
-  server.on("/SD_file_download", SD_file_download); 
+  server.on("/File_Download", File_Download); 
   /* start web server */
   server.begin();
   Serial.println("HTTP server started");
@@ -99,6 +99,10 @@ void handleNotFound(){
 
 
 
+void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
+  
+ SD_file_download("/tekst.txt");
+  }
 
 
 void SD_file_download("/tekst.txt"){
