@@ -8,8 +8,8 @@
 #include <WiFiMulti.h>        
 #include <ESP32WebServer.h>   
 #include <ESPmDNS.h>
-#include <Network.h>
-#include <Sys_Variables.h>
+//#include <Network.h>
+//#include <Sys_Variables.h>
 #include <CSS.h>
 
 // SD card pin
@@ -21,22 +21,14 @@ ESP32WebServer server(80);
 
 File tekst;
 
-void handleRoot() {
-  /* server respond 200 with content "hello from ESP32!" */
-  server.send(200, "text/plain", "hello from ESP32!");
-}
-
-void handleNotFound(){
-  String message = "File Not Found\n\n";
-  server.send(404, "text/plain", message);
-}
-
 
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  
+   Serial.println(MISO);
+   pinMode(19,INPUT_PULLUP);
+
  while (!Serial) {
     ; // pocakaj na povezavo
   }
@@ -61,7 +53,7 @@ void setup() {
     // if the file didn't open, print an error:
     Serial.println("error opening tekst.txt");
   }
-
+  //WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid, password);
   Serial.println("wifi begin");
     /* Wait for connection */
@@ -81,6 +73,8 @@ void setup() {
   /* register callback function when user request root "/" */
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
+  
+  server.on("/SD_file_download", SD_file_download); 
   /* start web server */
   server.begin();
   Serial.println("HTTP server started");
@@ -91,4 +85,29 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   server.handleClient();
+}
+
+void handleRoot() {
+  /* server respond 200 with content "hello from ESP32!" */
+  server.send(200, "text/plain", "hello from ESP32!");
+}
+
+void handleNotFound(){
+  String message = "File Not Found\n\n";
+  server.send(404, "text/plain", message);
+}
+
+
+
+
+
+void SD_file_download("/tekst.txt"){
+   
+    File download = SD.open("/tekst.txt");
+    if (download) {
+     
+      server.streamFile(download, "application/octet-stream");
+      download.close();
+    }
+
 }
