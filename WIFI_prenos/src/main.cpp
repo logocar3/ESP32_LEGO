@@ -8,6 +8,10 @@
 #include <WiFiMulti.h>        
 #include <ESP32WebServer.h>   
 #include <ESPmDNS.h>
+#include <WiFiClient.h>
+
+
+
 //#include <Network.h>
 //#include <Sys_Variables.h>
 //#include <CSS.h>
@@ -17,15 +21,46 @@
 
 const char* ssid = "sarakevin";
 const char* password = "poiqwe123";
+WiFiMulti wifiMulti;
 ESP32WebServer server(80);
 
+
+
 File tekst;
+
+
+void handleRoot() {
+  /* server respond 200 with content "hello from ESP32!" */
+  server.send(200, "text/plain", "hello from ESP32!");
+}
+
+void handleNotFound(){
+  String message = "File Not Found\n\n";
+  server.send(404, "text/plain", message);
+}
+
+void SD_file_download(String strText){
+   
+    File download = SD.open("/tekst.txt");
+    if (download) {
+     
+      server.streamFile(download, "application/octet-stream");
+      download.close();
+    }
+
+}
+
+void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
+  
+ SD_file_download("/tekst.txt");
+  }
+
 
 
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+   Serial.begin(9600);
    Serial.println(MISO);
    pinMode(19,INPUT_PULLUP);
 
@@ -81,37 +116,8 @@ void setup() {
 
 
 }
-
 void loop() {
   // put your main code here, to run repeatedly:
   server.handleClient();
 }
 
-void handleRoot() {
-  /* server respond 200 with content "hello from ESP32!" */
-  server.send(200, "text/plain", "hello from ESP32!");
-}
-
-void handleNotFound(){
-  String message = "File Not Found\n\n";
-  server.send(404, "text/plain", message);
-}
-
-
-
-void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
-  
- SD_file_download("/tekst.txt");
-  }
-
-
-void SD_file_download("/tekst.txt"){
-   
-    File download = SD.open("/tekst.txt");
-    if (download) {
-     
-      server.streamFile(download, "application/octet-stream");
-      download.close();
-    }
-
-}
