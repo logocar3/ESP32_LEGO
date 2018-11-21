@@ -40,18 +40,26 @@ void handleNotFound(){
 }
 
 void SD_file_download(String strText){
-   
+    Serial.println("sem v sd_file_download");
     File download = SD.open("/tekst.txt");
+
     if (download) {
-     
-      server.streamFile(download, "application/octet-stream");
+      Serial.println("pred server.stream");
+      // mogoce "text/html" namesto application
+      size_t sent=server.streamFile(download, "application/octet-stream");
+      //HTTPUpload& upload = server.upload();
+      Serial.println("stream");
       download.close();
+    }
+    else if(!download) {
+      Serial.println("ni uspel sd.open");
     }
 
 }
 
 void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
-  
+  server.send(200, "text/plain", "prenos!");
+  Serial.println("prenos");
  SD_file_download("/tekst.txt");
   }
 

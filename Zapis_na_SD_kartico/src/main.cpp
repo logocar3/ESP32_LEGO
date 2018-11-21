@@ -14,7 +14,10 @@ File tekst;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-
+  //pinMode(19,INPUT_PULLUP);
+  //pinMode(SD_CS,INPUT_PULLUP);
+  //pinMode(23,INPUT_PULLUP);
+  //pinMode(18,INPUT_PULLUP);
  while (!Serial) {
     ; // pocakaj na povezavo
   }
