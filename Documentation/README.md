@@ -1,12 +1,13 @@
 # Opozorila
 
- * Nikoli ne imeti poveyanega ESP32 na USB in 5V hkrati
+ * Nikoli ne imeti povezanega ESP32 na USB in 5V hkrati
  * Ni opozoril o prazni bateriji - pazi da boš imel zadosti polno baterijo!
  * Boljše vprašat kot pa cele dneve razbijat če kaj ne dela
  * Ko boste iskali za informacijami za programiranje, lahko iščete tudi pod gesli ESP8266, Arduino oz. C++
  * Za razhroščevanje uporabite Serial.write / writeln.
  * Naloži driver za USB! 
  * Naloži GIT
+ * SD kartica potrebuje 5V in ne 3.3V
 
 # Plan dela:
 Prvi zagovor: prvi teden decembra
@@ -16,6 +17,8 @@ Prvi zagovor: prvi teden decembra
 	 1. Prenos datoteke ESP32 -> računalnik preko Wifi. ESP32 uporabi kot http strežnik.
 	 1. Branje barvnega senzorja ter zapisovanje meritev v .csv datoteko (vrednosti ločene z vejico, vzorci s entrom)
 	 2. Odpiranje datoteke v matlabu
+ 3. Cilj do 6.12.2018: Dokončati kar ni bilo narejeno do sedaj PLUS:
+	 1. Priprava predstavitve (shema povezav, demonstracija postopka, opis uporabljenih protokolov)
  3. Krmiljenje motorja 
  4. Povezava vseh komponent
  5. Regulacija motorja 

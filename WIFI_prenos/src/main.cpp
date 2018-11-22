@@ -19,8 +19,10 @@
 // SD card pin
 #define SD_CS 5
 
-const char* ssid = "sarakevin";
-const char* password = "poiqwe123";
+//const char* ssid = "sarakevin";
+//const char* password = "poiqwe123";
+const char* ssid = "Avtomatika_AMS";
+const char* password = "AvtonomniMobilniSistemi";
 WiFiMulti wifiMulti;
 ESP32WebServer server(80);
 
@@ -41,26 +43,29 @@ void handleNotFound(){
 
 void SD_file_download(String strText){
     Serial.println("sem v sd_file_download");
-    File download = SD.open("/tekst.txt");
+    File download = SD.open("/" + strText); // Zakaj imaš argument strText če ga ne uporabiš?
 
     if (download) {
       Serial.println("pred server.stream");
-      // mogoce "text/html" namesto application
+      // mogoce "text/html" namesto application // Ali ste mogoče pomislili na ostale vrstice v primeru?
+      server.sendHeader("Content-Type", "text/text");
+      server.sendHeader("Content-Disposition", "attachment; filename="+strText);
+      server.sendHeader("Connection", "close");
       size_t sent=server.streamFile(download, "application/octet-stream");
       //HTTPUpload& upload = server.upload();
       Serial.println("stream");
-      download.close();
+      download.close();  // Preden zapremo datoteko pustiti procesorju da dokonča zadeve
     }
-    else if(!download) {
+    else if(!download) { // Ni potrebno še en if, ker je lahko le true/false
       Serial.println("ni uspel sd.open");
     }
 
 }
 
 void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
-  server.send(200, "text/plain", "prenos!");
+  //server.send(200, "text/plain", "prenos!");
   Serial.println("prenos");
- SD_file_download("/tekst.txt");
+  SD_file_download("tekst.txt");
   }
 
 
@@ -70,7 +75,10 @@ void setup() {
   // put your setup code here, to run once:
    Serial.begin(9600);
    Serial.println(MISO);
+   pinMode(23,INPUT_PULLUP);
    pinMode(19,INPUT_PULLUP);
+   pinMode(18,INPUT_PULLUP);
+   pinMode(5,INPUT_PULLUP);
 
  while (!Serial) {
     ; // pocakaj na povezavo
@@ -83,9 +91,9 @@ void setup() {
   }
   Serial.println("initialization done.");
 
-  tekst = SD.open("/tekst.txt", FILE_APPEND);
-
- // if the file opened okay, write to it: Bla bla
+  // PISANJE V DATOTEKO
+  tekst = SD.open("/tekst.txt", FILE_WRITE);
+  // if the file opened okay, write to it: Bla bla
   if (tekst) {
     Serial.print("Writing to tekst.txt...");
     tekst.println("test  22233");
@@ -96,7 +104,10 @@ void setup() {
     // if the file didn't open, print an error:
     Serial.println("error opening tekst.txt");
   }
+
   //WiFi.config(ip, gateway, subnet);
+  Serial.println("wifi begin");
+  delay(1000);
   WiFi.begin(ssid, password);
   Serial.println("wifi begin");
     /* Wait for connection */
@@ -113,6 +124,7 @@ void setup() {
   if (MDNS.begin("esp32")) {
     Serial.println("MDNS responder started");
   }
+  
   /* register callback function when user request root "/" */
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
