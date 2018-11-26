@@ -1,8 +1,9 @@
 #include <EV3UARTSensor.h>
-//#include <Serial.h>
+#include <Serial.h>
 #include <SoftwareSerial.h>
 
 EV3UARTSensor sensor(10,11);
+
 
 void setup() {
   Serial.begin(115200);
