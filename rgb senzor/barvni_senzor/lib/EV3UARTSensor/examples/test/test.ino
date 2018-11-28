@@ -1,25 +1,20 @@
-
-//#define DEBUG true
-#include <Arduino.h>
 #include <EV3UARTSensor.h>
-// #include <Serial.h>
-//#include <SoftwareSerial.h>
-EV3UARTSensor sensor(14,12);
+#include <Serial.h>
+#include <SoftwareSerial.h>
+
+EV3UARTSensor sensor(10,11);
 
 void setup() {
-  Serial.begin(9600);
-
-  Serial.print("Test ce pride do sem");
+  Serial.begin(115200);
   sensor.begin();
-  Serial.println("\nTest");
 }
 
 unsigned long lastMessage = 0;
 
 void loop() {
   sensor.check_for_data();
+
   if (sensor.get_status() == DATA_MODE && (millis() - lastMessage) > 1000 ) {
-    Serial.println("\nI'm in!");
     for(int i=0;i<sensor.get_number_of_modes();i++) {
       EV3UARTMode* mode = sensor.get_mode(i);
       Serial.print(i);
@@ -61,7 +56,7 @@ void loop() {
 	  Serial.print(sample[i]);
 	  Serial.print(" ");
 	}
-	  Serial.println();
+	Serial.println();
     lastMessage = millis();
   }
 }
