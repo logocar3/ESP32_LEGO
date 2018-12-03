@@ -199,7 +199,7 @@ void loop() {
   //zacetek testa
   Serial.println(" ");
   tekst = SD.open("/tekst.csv", FILE_APPEND);
-    Serial.println("odpru tekst.csv");
+  Serial.println("odpru tekst.csv");
 
  // if the file opened okay, write to it: Bla bla
   if (tekst) {
@@ -207,11 +207,13 @@ void loop() {
   
     for(int u=0;u<=250;u++){
       Serial.println("sem v testu");
-      sensor.check_for_data();
-      Serial.println("senzor pogleda za data");
       Serial.write(BYTE_NACK);
       Serial.println(" ");
+      
       Serial.println("napisal BYTE_NACK");
+      sensor.check_for_data();
+      Serial.println("senzor pogleda za data");
+      
 
       delay(20);
 
