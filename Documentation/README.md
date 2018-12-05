@@ -8,6 +8,7 @@
  * Naloži driver za USB! 
  * Naloži GIT
  * SD kartica potrebuje 5V in ne 3.3V
+ * Dvakrat preveri barve žic - v realnosti (predvsem pri stvareh iz Kitajske :) ) stvari niso nujno tako kot specificirane (primer: barve za ground / vin sta bili ravno zamenjani, kar je rezultiralo v skurjenem čipu)
 
 # Plan dela:
 Prvi zagovor: prvi teden decembra
@@ -32,3 +33,4 @@ Prvi zagovor: prvi teden decembra
  * Driver za ESP32 https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers
  * Navodila za instalacijo GIT http://codetunnel.com/installing-git-on-windows/
  * Protokol za komunikacijo z LEGO senzorji (UART): https://sourceforge.net/p/lejos/wiki/UART%20Sensor%20Protocol/
+ * Knjižnica za enkoderje: https://github.com/PaulStoffregen/Encoder
