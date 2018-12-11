@@ -165,7 +165,7 @@ void loop() {
     int d_test=millis();
 
     int frekvenca=millis();
-    for(int u=0;u<=250;u++){
+    for(int u=0;u<=249;u++){
      //Serial.println("sem v testu");
       Serial2.write(BYTE_NACK);
       
