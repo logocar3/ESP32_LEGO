@@ -168,6 +168,7 @@ void loop() {
     for(int u=0;u<=250;u++){
      //Serial.println("sem v testu");
       Serial2.write(BYTE_NACK);
+      
       //Serial.println(" ");
       
       //Serial.println("napisal BYTE_NACK");
