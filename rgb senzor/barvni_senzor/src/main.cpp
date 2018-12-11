@@ -133,49 +133,7 @@ void loop() {
   sensor.check_for_data();
   if (sensor.get_status() == DATA_MODE && (millis() - lastMessage) > 1000 ) {
     Serial.println("\nI'm in!");
-   /* for(int i=0;i<sensor.get_number_of_modes();i++) {
-      EV3UARTMode* mode = sensor.get_mode(i);
-      Serial.print(i);
-      Serial.print(" ");
-      Serial.print(mode->name); 
-      Serial.print("\t");
-      Serial.print(mode->get_data_type_string());
-      Serial.print("\t");
-      Serial.print(mode->symbol);
-      Serial.print("\t");
-      Serial.print(mode->sets);
-      Serial.print("\t");
-      Serial.print(mode->raw_low);
-      Serial.print(" - ");
-      Serial.println(mode->raw_high);
-    } */
-
-     /*if (Serial.available()) {
-      Serial.println("Test 1");
-      int cmd = Serial.read();
-      if (cmd >= '0'  && cmd <= '9') {
-        Serial.println("Test 2");
-         //int mode = cmd - '0';
-         int mode=4;
-         if (mode >=0 && mode < sensor.get_number_of_modes()) {
-           Serial.println("Test 3");
-           Serial.print("Setting mode to ");
-           Serial.println(mode);
-           sensor.set_mode(mode);
-         }
-      } else if (cmd == 'r'){  
-        Serial.println("Test 4");
-        sensor.reset();
-      }
-        else {
-        Serial.println("Test 5");
-      }
-    }
-
-    if (!Serial.available()){
-      Serial.println("serial ni availabe");
-    }
-    */
+  
     Serial.println("nastavljam mode");
     sensor.set_mode(mode);
     Serial.println("mode nastavljen");
@@ -198,25 +156,27 @@ void loop() {
 
   //zacetek testa
   Serial.println(" ");
-  tekst = SD.open("/tekst.csv", FILE_APPEND);
+  tekst = SD.open("/tekst.csv", FILE_WRITE);
   Serial.println("odpru tekst.csv");
 
  // if the file opened okay, write to it: Bla bla
   if (tekst) {
     Serial.println("zacetek testa");
-  
+    int d_test=millis();
+
+    int frekvenca=millis();
     for(int u=0;u<=250;u++){
-      Serial.println("sem v testu");
-      Serial.write(BYTE_NACK);
-      Serial.println(" ");
+     //Serial.println("sem v testu");
+      Serial2.write(BYTE_NACK);
+      //Serial.println(" ");
       
-      Serial.println("napisal BYTE_NACK");
+      //Serial.println("napisal BYTE_NACK");
+      while(Serial2.available()){
       sensor.check_for_data();
-      Serial.println("senzor pogleda za data");
+      }
       
-
-      delay(20);
-
+      //Serial.println("senzor pogleda za data");
+  
       float sample[sensor.sample_size()];
       sensor.fetch_sample(sample, 0);
       tekst.print(sample[0]);
@@ -225,10 +185,19 @@ void loop() {
       tekst.print(',');
       tekst.println(sample[2]);
       //tekst.println(';');
-      Serial.println("zapisal v tekst");
+      //Serial.println("zapisal v tekst");
+      while(millis()-frekvenca <= 20){
+
+      }
+      frekvenca=millis();
       
     }
+    d_test=millis()-d_test;
+
+
     Serial.println("konec");
+    Serial.println("cas testa");
+    Serial.println(d_test);
     delay(200);
     // close the file:
     tekst.close();
