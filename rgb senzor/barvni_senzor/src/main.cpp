@@ -19,10 +19,10 @@
 #define SD_CS 5
 #define BYTE_NACK 0x02
 #define mode 4
-const char* ssid = "sarakevin";
-const char* password = "poiqwe123";
-//const char* ssid = "Avtomatika_AMS";
-//const char* password = "AvtonomniMobilniSistemi";
+//const char* ssid = "sarakevin";
+//const char* password = "poiqwe123";
+const char* ssid = "Avtomatika_AMS";
+const char* password = "AvtonomniMobilniSistemi";
 WiFiMulti wifiMulti;
 ESP32WebServer server(80);
 
@@ -135,6 +135,8 @@ void loop() {
     Serial.println("\nI'm in!");
   
     Serial.println("nastavljam mode");
+    sensor.set_mode(mode);
+    sensor.set_mode(mode);
     sensor.set_mode(mode);
     Serial.println("mode nastavljen");
     delay(100);   
