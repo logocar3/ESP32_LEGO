@@ -12,13 +12,11 @@
 #include "driver/pcnt.h"
 
 #define RELOAD_TMR      		1
-//#define ENC_CHANNEL_A				13		// gpio for channels of encoder simulator
-//#define ENC_CHANNEL_B				15
 #define PCNT_PULSE_GPIO				32		// gpio for PCNT
 #define PCNT_CONTROL_GPIO			35
 //#define DIRECTION					25		// gpio for encoder direction input
-
-#define PCNT_H_LIM_VAL      32767
+// 
+#define PCNT_H_LIM_VAL      32767 //int16
 #define PCNT_L_LIM_VAL     -32767
 
 
@@ -78,7 +76,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
- //uint32_t frequency = 10;
+ 
  int16_t count = 0;
 
  while(1){
@@ -86,7 +84,6 @@ void loop() {
    pcnt_get_counter_value(PCNT_UNIT_0, &count);
                printf("Current counter value :%d\n", count);
  }
-
 
 
 }
