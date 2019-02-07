@@ -25,7 +25,7 @@
 void setup() {
   Serial.begin(9600);
   // put your setup code here, to run once:
- pcnt_config_t pcnt_config0 = {
+        pcnt_config_t pcnt_config0 = {
 		        .pulse_gpio_num = PCNT_PULSE_GPIO1,
 		        .ctrl_gpio_num = PCNT_CONTROL_GPIO1,
             .lctrl_mode = PCNT_MODE_KEEP, 			// Reverse counting direction if low
@@ -36,9 +36,6 @@ void setup() {
 		        .counter_l_lim = PCNT_L_LIM_VAL,
             .unit = PCNT_UNIT_0,
             .channel = PCNT_CHANNEL_0,
-		        
-		        
-		        
 		    };
         pcnt_config_t pcnt_config1 = {
 		    
@@ -51,12 +48,9 @@ void setup() {
 		        .counter_h_lim = PCNT_H_LIM_VAL,
 		        .counter_l_lim = PCNT_L_LIM_VAL,
             .unit = PCNT_UNIT_0,
-            .channel = PCNT_CHANNEL_1,
-		        
+            .channel = PCNT_CHANNEL_1, 
 		    };
-       
-    
-     pcnt_config_t pcnt_config2 = {
+        pcnt_config_t pcnt_config2 = {
 		        .pulse_gpio_num = PCNT_PULSE_GPIO2,
 		        .ctrl_gpio_num = PCNT_CONTROL_GPIO2,
             .lctrl_mode = PCNT_MODE_KEEP, 			// Reverse counting direction if low
@@ -66,10 +60,7 @@ void setup() {
 		        .counter_h_lim = PCNT_H_LIM_VAL,
 		        .counter_l_lim = PCNT_L_LIM_VAL,
             .unit = PCNT_UNIT_1,
-            .channel = PCNT_CHANNEL_0,
-		        
-		        
-		        
+            .channel = PCNT_CHANNEL_0,  
 		    };
         pcnt_config_t pcnt_config3 = {
 		    
@@ -83,7 +74,6 @@ void setup() {
 		        .counter_l_lim = PCNT_L_LIM_VAL,
             .unit = PCNT_UNIT_1,
             .channel = PCNT_CHANNEL_1,
-		        
 		    };
 
 
@@ -135,7 +125,7 @@ void loop() {
 
    pcnt_get_counter_value(PCNT_UNIT_0, &count1);
    pcnt_get_counter_value(PCNT_UNIT_1, &count2);
-               printf("encoder1:%d \t encoder2:%d \n", count1,count2);
+               printf("encoder levi:%d \t encoder desni:%d \n", count1,count2);
  }
 
 
