@@ -11,6 +11,18 @@
 #include <esp_log.h>
 #include "driver/pcnt.h"
 
+#include <EV3UARTSensor.h>
+// knjiznice SD
+#include <FS.h>
+#include <SD.h>
+#include <SPI.h>
+// knjizice wifi
+#include <WiFi.h>              
+#include <WiFiMulti.h>        
+#include <ESP32WebServer.h>   
+#include <ESPmDNS.h>
+#include <WiFiClient.h>
+
 #define RELOAD_TMR      		1
 #define PCNT_PULSE_GPIO1				32		// gpio for PCNT
 #define PCNT_CONTROL_GPIO1			35
@@ -20,6 +32,19 @@
 // 
 #define PCNT_H_LIM_VAL      32767 //int16
 #define PCNT_L_LIM_VAL     -32767
+//sd kartica
+#define SD_CS 5
+#define BYTE_NACK 0x02
+#define mode 4
+const char* ssid = "sarakevin";
+const char* password = "poiqwe123";
+//const char* ssid = "Avtomatika_AMS";
+//const char* password = "AvtonomniMobilniSistemi";
+WiFiMulti wifiMulti;
+ESP32WebServer server(80);
+
+File tekst;
+//EV3UARTSensor sensor(14,12);
 
 // desni motor
 int MDP1 = 27; //motor desni pin 1 na h-bridge
@@ -38,6 +63,50 @@ const int pwmChannelD = 1;
 const int resolution = 8;
 int dutyCycleL = 120;
 int dutyCycleD = 120;
+
+void handleRoot() {
+  /* server respond 200 with content "hello from ESP32!" */
+  server.send(200, "text/plain", "hello from ESP32!");
+}
+
+void handleNotFound(){
+  String message = "File Not Found\n\n";
+  server.send(404, "text/plain", message);
+}
+
+void SD_file_download(String strText){
+    Serial.println("sem v sd_file_download");
+    File download = SD.open("/" + strText); // Zakaj imaš argument strText če ga ne uporabiš?
+
+    if (download) {
+      Serial.println("pred server.stream");
+      // mogoce "text/html" namesto application // Ali ste mogoče pomislili na ostale vrstice v primeru?
+      server.sendHeader("Content-Type", "text/text");
+      server.sendHeader("Content-Disposition", "attachment; filename="+strText);
+      server.sendHeader("Connection", "close");
+      size_t sent=server.streamFile(download, "application/octet-stream");
+      //HTTPUpload& upload = server.upload();
+      Serial.println("stream");
+      download.close();  // Preden zapremo datoteko pustiti procesorju da dokonča zadeve
+    }
+    else if(!download) { // Ni potrebno še en if, ker je lahko le true/false
+      Serial.println("ni uspel sd.open");
+    }
+
+}
+
+void File_Download(){ // This gets called twice, the first pass selects the input, the second pass then processes the command line arguments
+  //server.send(200, "text/plain", "prenos!");
+  Serial.println("prenos");
+  SD_file_download("tekst.csv");
+  
+  
+  }
+
+
+
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -139,6 +208,59 @@ void setup() {
         pinMode(enableDESNI, OUTPUT);
         ledcSetup(pwmChannelD, freq, resolution);
         ledcAttachPin(enableDESNI, pwmChannelD);  
+         
+         //sd kartica
+         Serial.println(MISO);
+         pinMode(23,INPUT_PULLUP);
+         pinMode(19,INPUT_PULLUP);
+         pinMode(18,INPUT_PULLUP);
+         pinMode(5,INPUT_PULLUP);
+
+         while (!Serial) {
+          ; // pocakaj na povezavo
+         }
+         Serial.print("Initializing SD card...");
+
+         if (!SD.begin(SD_CS)) {
+            Serial.println("initialization failed!");
+         while (1);
+         }
+         Serial.println("initialization done.");
+         
+           //WiFi.config(ip, gateway, subnet);
+         Serial.println("wifi begin0");
+         delay(1000);
+         Serial.println("pred povezavo");
+         delay(100);
+         WiFi.begin(ssid, password);
+         Serial.println("wifi begin1");
+            /* Wait for connection */
+         while (WiFi.status() != WL_CONNECTED) {
+            delay(500);
+            Serial.print(".");
+         }
+         Serial.println("");
+         Serial.print("Connected to ");
+         Serial.println(ssid);
+         Serial.print("IP address: ");
+         Serial.println(WiFi.localIP());
+         /* we use mDNS here http://esp32.local */
+         if (MDNS.begin("esp32")) {
+            Serial.println("MDNS responder started");
+         }
+         
+         /* register callback function when user request root "/" */
+         server.on("/", handleRoot);
+         server.onNotFound(handleNotFound);
+         
+         server.on("/File_Download", File_Download); 
+         /* start web server */
+         server.begin();
+         Serial.println("HTTP server started");
+
+         Serial.print("Test ce pride do sem");
+         //sensor.begin();
+         Serial.println("\n Test");
 
 }
 
@@ -147,38 +269,54 @@ void loop() {
  int16_t enkoderD = 0;
  int napaka = 0; //razilka med enkoderiji
  int K=dutyCycleD; //ojacanje
-    
+ Serial.println(" ");
+ tekst = SD.open("/tekst.csv", FILE_WRITE);
+ Serial.println("odpru tekst.csv");   
 
- while(enkoderD<18000){
-    
-    pcnt_get_counter_value(PCNT_UNIT_0, &enkoderL);
-    pcnt_get_counter_value(PCNT_UNIT_1, &enkoderD);
-    napaka = enkoderD-enkoderL;
-    printf("napaka: %d\n",napaka);
-    dutyCycleL = dutyCycleL + napaka/K;
-    //desni motor
-    digitalWrite(MDP1, LOW);
-    digitalWrite(MDP2, HIGH);
-    ledcWrite(pwmChannelD, dutyCycleD);
-    //levi motor
-    digitalWrite(MLP3, LOW);
-    digitalWrite(MLP4, HIGH);
-    ledcWrite(pwmChannelL, dutyCycleL);
-    delay(100); 
-               printf("encoder levi:%d \t encoder desni:%d \n", enkoderL,enkoderD);
- }
- while(1){
-    
-    
-    //desni motor
-    digitalWrite(MDP1, LOW);
-    digitalWrite(MDP2, LOW);
-    
-    //levi motor
-    digitalWrite(MLP3, LOW);
-    digitalWrite(MLP4, LOW);
-    
-    delay(100); 
-              
- }
+if(tekst){
+
+      while(enkoderD<18000){
+         
+         pcnt_get_counter_value(PCNT_UNIT_0, &enkoderL);
+         pcnt_get_counter_value(PCNT_UNIT_1, &enkoderD);
+         napaka = enkoderD-enkoderL;
+         printf("napaka: %d\n",napaka);
+         dutyCycleL = dutyCycleL + napaka/K;
+         //desni motor
+         digitalWrite(MDP1, LOW);
+         digitalWrite(MDP2, HIGH);
+         ledcWrite(pwmChannelD, dutyCycleD);
+         //levi motor
+         digitalWrite(MLP3, LOW);
+         digitalWrite(MLP4, HIGH);
+         ledcWrite(pwmChannelL, dutyCycleL);
+         delay(100); 
+                     printf("encoder levi:%d \t encoder desni:%d \n", enkoderL,enkoderD);
+                     //zacetek testa
+                     
+                     tekst.print(enkoderL);
+                     tekst.print(',');
+                     tekst.print(enkoderD);
+      }
+      delay(100);
+      tekst.close();
+      Serial.println("done.");
+      //desni motor
+         digitalWrite(MDP1, LOW);
+         digitalWrite(MDP2, LOW);
+         
+         //levi motor
+         digitalWrite(MLP3, LOW);
+         digitalWrite(MLP4, LOW);
+         
+         delay(100); 
+      while(1){
+         
+         server.handleClient();
+         
+                  
+      }
+  } else{
+     Serial.println("error opening tekst.csv");
+  }
 }
