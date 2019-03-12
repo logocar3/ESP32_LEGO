@@ -9,6 +9,8 @@
 #include <ESP32WebServer.h>   
 #include <ESPmDNS.h>
 #include <WiFiClient.h>
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
 
 
 
@@ -19,10 +21,10 @@
 // SD card pin
 #define SD_CS 5
 
-//const char* ssid = "sarakevin";
-//const char* password = "poiqwe123";
-const char* ssid = "Avtomatika_AMS";
-const char* password = "AvtonomniMobilniSistemi";
+const char* ssid = "sarakevin";
+const char* password = "poiqwe123";
+//const char* ssid = "Avtomatika_AMS";
+//const char* password = "AvtonomniMobilniSistemi";
 WiFiMulti wifiMulti;
 ESP32WebServer server(80);
 
@@ -74,6 +76,7 @@ void File_Download(){ // This gets called twice, the first pass selects the inpu
 void setup() {
   // put your setup code here, to run once:
    Serial.begin(9600);
+   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
    Serial.println(MISO);
    pinMode(23,INPUT_PULLUP);
    pinMode(19,INPUT_PULLUP);

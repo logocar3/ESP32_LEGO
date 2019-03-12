@@ -95,7 +95,7 @@ void setup() {
     /* Everything is set up, now go to counting */
     pcnt_counter_resume(PCNT_UNIT_0);
 
-      pcnt_unit_config(&pcnt_config2);
+    pcnt_unit_config(&pcnt_config2);
     pcnt_unit_config(&pcnt_config3);
     pcnt_set_filter_value(PCNT_UNIT_1, 100);
     pcnt_filter_enable(PCNT_UNIT_1);
